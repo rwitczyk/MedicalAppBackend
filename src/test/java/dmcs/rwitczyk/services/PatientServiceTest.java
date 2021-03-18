@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +28,8 @@ class PatientServiceTest {
 
     private OneVisitRepository oneVisitRepository;
 
+    private PasswordEncoder passwordEncoder;
+
     @BeforeEach
     void setUp() {
         patientRepository = Mockito.mock(PatientRepository.class);
@@ -34,7 +37,8 @@ class PatientServiceTest {
         userLoginDataRepository = Mockito.mock(UserLoginDataRepository.class);
         accountService = Mockito.mock(AccountService.class);
         oneVisitRepository = Mockito.mock(OneVisitRepository.class);
-        patientService = new PatientService(patientRepository, doctorRepository, userLoginDataRepository, accountService, oneVisitRepository);
+        passwordEncoder = Mockito.mock(PasswordEncoder.class);
+        patientService = new PatientService(patientRepository, doctorRepository, userLoginDataRepository, accountService, oneVisitRepository, passwordEncoder);
     }
 
     @Test

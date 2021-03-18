@@ -16,10 +16,8 @@ import dmcs.rwitczyk.utils.Converters;
 import dmcs.rwitczyk.utils.OneVisitPdfGenerator;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -45,13 +43,16 @@ public class PatientService {
 
     private OneVisitRepository oneVisitRepository;
 
+    private PasswordEncoder passwordEncoder;
+
     @Autowired
-    public PatientService(PatientRepository patientRepository, DoctorRepository doctorRepository, UserLoginDataRepository userLoginDataRepository, AccountService accountService, OneVisitRepository oneVisitRepository) {
+    public PatientService(PatientRepository patientRepository, DoctorRepository doctorRepository, UserLoginDataRepository userLoginDataRepository, AccountService accountService, OneVisitRepository oneVisitRepository, PasswordEncoder passwordEncoder) {
         this.patientRepository = patientRepository;
         this.doctorRepository = doctorRepository;
         this.userLoginDataRepository = userLoginDataRepository;
         this.accountService = accountService;
         this.oneVisitRepository = oneVisitRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public void addPatient(AddPatientAccountDto addPatientAccountDto) {
@@ -60,7 +61,7 @@ public class PatientService {
         }
 
         PatientEntity patientEntity = Converters.convertPatientDtoToEntity(addPatientAccountDto);
-        patientEntity.getUserLoginDataEntity().setPassword(passwordEncoder().encode(patientEntity.getUserLoginDataEntity().getPassword()));
+        patientEntity.getUserLoginDataEntity().setPassword(passwordEncoder.encode(patientEntity.getUserLoginDataEntity().getPassword()));
         PatientEntity patient = patientRepository.save(patientEntity);
         accountService.sendActivationEmail(patient.getId());
     }
@@ -74,7 +75,7 @@ public class PatientService {
         patientEntity.setPhoneNumber(patientModel.getPhoneNumber());
 
         if (patientModel.getPassword().length() > 0) {
-            patientEntity.getUserLoginDataEntity().setPassword(passwordEncoder().encode(patientModel.getPassword()));
+            patientEntity.getUserLoginDataEntity().setPassword(passwordEncoder.encode(patientModel.getPassword()));
         }
         this.patientRepository.save(patientEntity);
     }
@@ -102,12 +103,6 @@ public class PatientService {
         }
 
         return patientRepository.findByUserLoginDataEntityId(patientAccountId);
-    }
-
-
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
     }
 
     public List<AvailableVisitsListDto> getAllPatientVisits(int patientAccountId) {

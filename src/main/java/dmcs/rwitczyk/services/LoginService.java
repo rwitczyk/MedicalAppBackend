@@ -8,9 +8,7 @@ import dmcs.rwitczyk.repository.UserLoginDataRepository;
 import dmcs.rwitczyk.security.JwtTokenProvider;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,11 +25,14 @@ public class LoginService {
 
     private JwtTokenProvider jwtTokenProvider;
 
+    private PasswordEncoder passwordEncoder;
+
     @Autowired
-    public LoginService(UserLoginDataRepository userLoginDataRepository, AuthenticationManager authenticationManager, JwtTokenProvider jwtTokenProvider) {
+    public LoginService(UserLoginDataRepository userLoginDataRepository, AuthenticationManager authenticationManager, JwtTokenProvider jwtTokenProvider, PasswordEncoder passwordEncoder) {
         this.userLoginDataRepository = userLoginDataRepository;
         this.authenticationManager = authenticationManager;
         this.jwtTokenProvider = jwtTokenProvider;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public TokenResponse login(LoginDto loginDto) {
@@ -42,7 +43,7 @@ public class LoginService {
             throw new AccountNotFoundException("Nie znaleziono usera");
         }
 
-        if (!passwordEncoder().matches(loginDto.getPassword(), user.getPassword())) {
+        if (!passwordEncoder.matches(loginDto.getPassword(), user.getPassword())) {
             log.info("Nieprawidlowe hasło");
             throw new AccountNotFoundException("Nieprawidlowe hasło");
         }
@@ -59,8 +60,4 @@ public class LoginService {
         return response;
     }
 
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
 }

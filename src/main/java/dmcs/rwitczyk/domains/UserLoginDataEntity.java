@@ -40,4 +40,8 @@ public class UserLoginDataEntity {
     @JsonBackReference
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, optional = true, mappedBy = "userLoginDataEntity")
     private DoctorEntity doctorEntity;
+
+    @JsonBackReference
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, optional = true, mappedBy = "userLoginDataEntity")
+    private NurseEntity nurseEntity;
 }

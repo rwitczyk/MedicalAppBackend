@@ -30,7 +30,7 @@ class LoginServiceTest {
     @BeforeEach
     void setUp() {
         MockitoAnnotations.initMocks(this);
-        loginService = new LoginService(userLoginDataRepository, authenticationManager, jwtTokenProvider);
+        loginService = new LoginService(userLoginDataRepository, authenticationManager, jwtTokenProvider, new BCryptPasswordEncoder());
     }
 
     @Test

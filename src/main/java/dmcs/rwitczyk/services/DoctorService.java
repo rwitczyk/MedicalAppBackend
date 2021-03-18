@@ -15,8 +15,6 @@ import dmcs.rwitczyk.repository.UserLoginDataRepository;
 import dmcs.rwitczyk.utils.Converters;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,11 +33,14 @@ public class DoctorService {
 
     private OneVisitRepository oneVisitRepository;
 
+    private PasswordEncoder passwordEncoder;
+
     @Autowired
-    public DoctorService(UserLoginDataRepository userLoginDataRepository, DoctorRepository doctorRepository, OneVisitRepository oneVisitRepository) {
+    public DoctorService(UserLoginDataRepository userLoginDataRepository, DoctorRepository doctorRepository, OneVisitRepository oneVisitRepository, PasswordEncoder passwordEncoder) {
         this.userLoginDataRepository = userLoginDataRepository;
         this.doctorRepository = doctorRepository;
         this.oneVisitRepository = oneVisitRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public void addDoctor(AddDoctorAccountDto addDoctorAccountDto) {
@@ -48,7 +49,7 @@ public class DoctorService {
         }
 
         DoctorEntity doctorEntity = Converters.convertDoctorDtoToEntity(addDoctorAccountDto);
-        doctorEntity.getUserLoginDataEntity().setPassword(passwordEncoder().encode(doctorEntity.getUserLoginDataEntity().getPassword()));
+        doctorEntity.getUserLoginDataEntity().setPassword(passwordEncoder.encode(doctorEntity.getUserLoginDataEntity().getPassword()));
         doctorEntity.getUserLoginDataEntity().setEnabled(true);
         doctorRepository.save(doctorEntity);
     }
@@ -64,12 +65,6 @@ public class DoctorService {
         DoctorEntity doctorEntity = this.doctorRepository.findById(doctorId).get();
         doctorEntity.getUserLoginDataEntity().setEnabled(changeAccountAction);
         this.doctorRepository.save(doctorEntity);
-    }
-
-
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
     }
 
     public List<DoctorEntity> getAllDoctors() {
