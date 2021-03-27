@@ -3,14 +3,13 @@ package dmcs.rwitczyk.controller;
 import dmcs.rwitczyk.dto.AddNurseAccountDto;
 import dmcs.rwitczyk.services.NurseService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(value = "/nurse")
+@CrossOrigin(origins = "http://localhost:4200")
 public class NurseController {
 
     @Autowired
@@ -21,4 +20,11 @@ public class NurseController {
         nurseService.addNurseAccount(addNurseAccountDto);
         return ResponseEntity.ok().build();
     }
+
+    @GetMapping()
+    public ResponseEntity getAllNurses() {
+        return new ResponseEntity<>(nurseService.getAllNurses(), HttpStatus.OK);
+    }
+
+
 }

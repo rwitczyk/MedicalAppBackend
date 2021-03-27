@@ -13,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @Slf4j
 public class NurseService {
@@ -51,4 +53,9 @@ public class NurseService {
         log.info("Konto pielęgniarki zostało utworzone, email: " + addNurseAccountDto.getEmail());
     }
 
+
+    public List<NurseEntity> getAllNurses() {
+        List<NurseEntity> nurseEntities = nurseRepository.findAll();
+        return nurseEntities;
+    }
 }
