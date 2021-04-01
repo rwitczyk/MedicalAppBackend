@@ -66,7 +66,6 @@ public class PatientService {
         accountService.sendActivationEmail(patient.getId());
     }
 
-
     public void editPatient(EditPatientDataDto patientModel) {
         PatientEntity patientEntity = this.patientRepository.findById(patientModel.getPatientId()).get();
 

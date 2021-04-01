@@ -4,6 +4,7 @@ import dmcs.rwitczyk.domains.NurseEntity;
 import dmcs.rwitczyk.domains.RoleEntity;
 import dmcs.rwitczyk.domains.UserLoginDataEntity;
 import dmcs.rwitczyk.dto.AddNurseAccountDto;
+import dmcs.rwitczyk.dto.EditNurseAccountDto;
 import dmcs.rwitczyk.exceptions.AccountAlreadyExistsException;
 import dmcs.rwitczyk.exceptions.AccountNotFoundException;
 import dmcs.rwitczyk.models.RoleEnum;
@@ -54,6 +55,17 @@ public class NurseService {
         log.info("Konto pielęgniarki zostało utworzone, email: " + addNurseAccountDto.getEmail());
     }
 
+    public void editNurseAccount(EditNurseAccountDto nurseAccountDto) {
+        NurseEntity nurseEntity = this.nurseRepository.findById(nurseAccountDto.getNurseId()).get();
+
+        nurseEntity.setFirstName(nurseAccountDto.getFirstName());
+        nurseEntity.setLastName(nurseAccountDto.getLastName());
+
+        if (nurseAccountDto.getPassword().length() > 0) {
+            nurseEntity.getUserLoginDataEntity().setPassword(passwordEncoder.encode(nurseAccountDto.getPassword()));
+        }
+        this.nurseRepository.save(nurseEntity);
+    }
 
     public List<NurseEntity> getAllNurses() {
         List<NurseEntity> nurseEntities = nurseRepository.findAll();
@@ -70,5 +82,13 @@ public class NurseService {
         NurseEntity nurseEntity = this.nurseRepository.findById(nurseId).get();
         nurseEntity.getUserLoginDataEntity().setEnabled(changeAccountAction);
         this.nurseRepository.save(nurseEntity);
+    }
+
+    public NurseEntity findNurseEntityById(Integer nurseId) {
+        if (nurseRepository.findByUserLoginDataEntityId(nurseId) != null) {
+            return nurseRepository.findByUserLoginDataEntityId(nurseId);
+        }
+
+        throw new AccountNotFoundException("Nie istnieje konto pielegniarki o id: " + nurseId);
     }
 }

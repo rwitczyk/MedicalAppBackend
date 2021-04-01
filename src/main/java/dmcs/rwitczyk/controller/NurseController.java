@@ -2,6 +2,7 @@ package dmcs.rwitczyk.controller;
 
 import dmcs.rwitczyk.domains.NurseEntity;
 import dmcs.rwitczyk.dto.AddNurseAccountDto;
+import dmcs.rwitczyk.dto.EditNurseAccountDto;
 import dmcs.rwitczyk.services.NurseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -24,6 +25,19 @@ public class NurseController {
     public ResponseEntity<?> addNurseAccount(@RequestBody AddNurseAccountDto addNurseAccountDto) {
         nurseService.addNurseAccount(addNurseAccountDto);
         return ResponseEntity.ok().build();
+    }
+
+    @PreAuthorize("hasAnyRole('ADMIN', 'NURSE')")
+    @PostMapping("/edit")
+    public ResponseEntity<?> editNurseAccount(@RequestBody EditNurseAccountDto editNurseAccountDto) {
+        nurseService.editNurseAccount(editNurseAccountDto);
+        return ResponseEntity.ok().build();
+    }
+
+    @PreAuthorize("hasAnyRole('ADMIN', 'NURSE')")
+    @GetMapping("/{nurseId}")
+    public ResponseEntity<NurseEntity> getNurseById(@PathVariable Integer nurseId) {
+        return new ResponseEntity<>(nurseService.findNurseEntityById(nurseId), HttpStatus.OK);
     }
 
     @PreAuthorize("hasRole('ADMIN')")
