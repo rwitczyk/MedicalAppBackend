@@ -15,11 +15,12 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @Builder
+@Table(name = "nurses")
 public class NurseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long nurseId;
+    private Long id;
 
     @JsonManagedReference
     @OneToOne(fetch = FetchType.EAGER, optional = false, cascade = CascadeType.ALL)

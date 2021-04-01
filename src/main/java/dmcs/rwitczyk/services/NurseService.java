@@ -5,6 +5,7 @@ import dmcs.rwitczyk.domains.RoleEntity;
 import dmcs.rwitczyk.domains.UserLoginDataEntity;
 import dmcs.rwitczyk.dto.AddNurseAccountDto;
 import dmcs.rwitczyk.exceptions.AccountAlreadyExistsException;
+import dmcs.rwitczyk.exceptions.AccountNotFoundException;
 import dmcs.rwitczyk.models.RoleEnum;
 import dmcs.rwitczyk.repository.NurseRepository;
 import dmcs.rwitczyk.repository.UserLoginDataRepository;
@@ -57,5 +58,17 @@ public class NurseService {
     public List<NurseEntity> getAllNurses() {
         List<NurseEntity> nurseEntities = nurseRepository.findAll();
         return nurseEntities;
+    }
+
+    public void changeAccountState(Long nurseId, boolean changeAccountAction) {
+        if (!this.nurseRepository.findById(nurseId).isPresent()) {
+            throw new AccountNotFoundException("Nie znaleziono konta o takim id!");
+        }
+
+        log.info("Konto pielegniarki zmienilo status na: " + changeAccountAction);
+
+        NurseEntity nurseEntity = this.nurseRepository.findById(nurseId).get();
+        nurseEntity.getUserLoginDataEntity().setEnabled(changeAccountAction);
+        this.nurseRepository.save(nurseEntity);
     }
 }
