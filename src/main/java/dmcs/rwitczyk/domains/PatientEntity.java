@@ -40,4 +40,9 @@ public class PatientEntity {
     private String phoneNumber;
 
     private String pesel;
+
+    @Fetch(value = FetchMode.SUBSELECT)
+    @JsonManagedReference
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "patientEntity")
+    private List<LaboratoryTestEntity> laboratoryTestEntities;
 }
