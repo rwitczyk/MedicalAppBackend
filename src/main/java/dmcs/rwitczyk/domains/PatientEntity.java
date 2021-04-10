@@ -40,4 +40,7 @@ public class PatientEntity {
     private String phoneNumber;
 
     private String pesel;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "patient")
+    private List<AdvertisingGroupEntity> advertisingGroups;
 }

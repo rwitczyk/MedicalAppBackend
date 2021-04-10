@@ -35,6 +35,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers("/patient/add").permitAll()
                 .antMatchers("/validateToken").permitAll()
                 .antMatchers("/patient/confirmAccount/*").permitAll()
+                .antMatchers("/advertising/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .addFilter(new JwtFilter(authenticationManager(), jwtTokenProvider));
