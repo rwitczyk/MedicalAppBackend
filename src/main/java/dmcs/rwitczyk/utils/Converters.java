@@ -4,6 +4,7 @@ import dmcs.rwitczyk.domains.*;
 import dmcs.rwitczyk.dto.AddDoctorAccountDto;
 import dmcs.rwitczyk.dto.AddPatientAccountDto;
 import dmcs.rwitczyk.dto.AvailableVisitsListDto;
+import dmcs.rwitczyk.dto.LaboratoryTestDto;
 import dmcs.rwitczyk.models.RoleEnum;
 
 public class Converters {
@@ -49,6 +50,18 @@ public class Converters {
                 .description(oneVisitEntity.getDescription())
                 .status(oneVisitEntity.getStatus())
                 .price(oneVisitEntity.getPrice())
+                .build();
+    }
+
+
+    public static LaboratoryTestEntity convertLaboratoryTestDtoToEntity(LaboratoryTestDto laboratoryTestDto) {
+        return LaboratoryTestEntity.builder()
+                .subject(laboratoryTestDto.getSubject())
+                .description(laboratoryTestDto.getDescription())
+                .antygenTest(laboratoryTestDto.isAntygen())
+                .pcrTest(laboratoryTestDto.isPcr())
+                .seroTest(laboratoryTestDto.isSero())
+                .covidResult(laboratoryTestDto.isSero() || laboratoryTestDto.isPcr() || laboratoryTestDto.isAntygen())
                 .build();
     }
 }
