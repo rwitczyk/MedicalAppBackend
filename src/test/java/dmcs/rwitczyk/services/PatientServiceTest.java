@@ -1,10 +1,7 @@
 package dmcs.rwitczyk.services;
 
 import dmcs.rwitczyk.domains.PatientEntity;
-import dmcs.rwitczyk.repository.DoctorRepository;
-import dmcs.rwitczyk.repository.OneVisitRepository;
-import dmcs.rwitczyk.repository.PatientRepository;
-import dmcs.rwitczyk.repository.UserLoginDataRepository;
+import dmcs.rwitczyk.repository.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -30,6 +27,8 @@ class PatientServiceTest {
 
     private PasswordEncoder passwordEncoder;
 
+    private AdvertisingGroupRepository advertisingGroupRepository;
+
     @BeforeEach
     void setUp() {
         patientRepository = Mockito.mock(PatientRepository.class);
@@ -38,7 +37,7 @@ class PatientServiceTest {
         accountService = Mockito.mock(AccountService.class);
         oneVisitRepository = Mockito.mock(OneVisitRepository.class);
         passwordEncoder = Mockito.mock(PasswordEncoder.class);
-        patientService = new PatientService(patientRepository, doctorRepository, userLoginDataRepository, accountService, oneVisitRepository, passwordEncoder);
+        patientService = new PatientService(patientRepository, doctorRepository, userLoginDataRepository, accountService, oneVisitRepository, passwordEncoder, advertisingGroupRepository);
     }
 
     @Test

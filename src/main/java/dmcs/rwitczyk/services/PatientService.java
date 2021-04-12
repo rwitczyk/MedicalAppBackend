@@ -1,5 +1,6 @@
 package dmcs.rwitczyk.services;
 
+import dmcs.rwitczyk.domains.AdvertisingGroupEntity;
 import dmcs.rwitczyk.domains.DoctorEntity;
 import dmcs.rwitczyk.domains.OneVisitEntity;
 import dmcs.rwitczyk.domains.PatientEntity;
@@ -8,10 +9,7 @@ import dmcs.rwitczyk.exceptions.AccountAlreadyExistsException;
 import dmcs.rwitczyk.exceptions.AccountNotFoundException;
 import dmcs.rwitczyk.exceptions.UnauthorizedAccessException;
 import dmcs.rwitczyk.models.VisitStatusEnum;
-import dmcs.rwitczyk.repository.DoctorRepository;
-import dmcs.rwitczyk.repository.OneVisitRepository;
-import dmcs.rwitczyk.repository.PatientRepository;
-import dmcs.rwitczyk.repository.UserLoginDataRepository;
+import dmcs.rwitczyk.repository.*;
 import dmcs.rwitczyk.utils.Converters;
 import dmcs.rwitczyk.utils.OneVisitPdfGenerator;
 import lombok.extern.slf4j.Slf4j;
@@ -45,14 +43,17 @@ public class PatientService {
 
     private PasswordEncoder passwordEncoder;
 
+    private AdvertisingGroupRepository advertisingGroupRepository;
+
     @Autowired
-    public PatientService(PatientRepository patientRepository, DoctorRepository doctorRepository, UserLoginDataRepository userLoginDataRepository, AccountService accountService, OneVisitRepository oneVisitRepository, PasswordEncoder passwordEncoder) {
+    public PatientService(PatientRepository patientRepository, DoctorRepository doctorRepository, UserLoginDataRepository userLoginDataRepository, AccountService accountService, OneVisitRepository oneVisitRepository, PasswordEncoder passwordEncoder, AdvertisingGroupRepository advertisingGroupRepository) {
         this.patientRepository = patientRepository;
         this.doctorRepository = doctorRepository;
         this.userLoginDataRepository = userLoginDataRepository;
         this.accountService = accountService;
         this.oneVisitRepository = oneVisitRepository;
         this.passwordEncoder = passwordEncoder;
+        this.advertisingGroupRepository = advertisingGroupRepository;
     }
 
     public void addPatient(AddPatientAccountDto addPatientAccountDto) {
@@ -155,6 +156,14 @@ public class PatientService {
     public void reserveVisit(ReserveVisitDto reserveVisitDto) {
         OneVisitEntity oneVisitEntity = oneVisitRepository.findById(reserveVisitDto.getVisitId()).get();
         PatientEntity patientEntity = patientRepository.findByUserLoginDataEntityId(reserveVisitDto.getPatientAccountId());
+
+        if (!patientEntity.getAdvertisingGroups().stream().anyMatch(group -> oneVisitEntity.getDoctorEntity().getSpecialization().equals(group.getName()))) {
+            advertisingGroupRepository.save(AdvertisingGroupEntity.builder()
+                    .name(oneVisitEntity.getDoctorEntity().getSpecialization())
+                    .patient(patientEntity)
+                    .build());
+        };
+
 
         oneVisitEntity.setPatientEntity(patientEntity);
         oneVisitEntity.setStatus(VisitStatusEnum.TO_ACCEPT);
