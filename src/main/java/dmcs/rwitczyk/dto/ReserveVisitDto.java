@@ -12,4 +12,6 @@ public class ReserveVisitDto {
     private int visitId;
 
     private int patientAccountId;
+
+    private String visitType;
 }

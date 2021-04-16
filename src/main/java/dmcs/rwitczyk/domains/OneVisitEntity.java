@@ -2,6 +2,7 @@ package dmcs.rwitczyk.domains;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import dmcs.rwitczyk.models.VisitStatusEnum;
+import dmcs.rwitczyk.models.VisitTypeEnum;
 import lombok.*;
 
 import javax.persistence.*;
@@ -38,4 +39,7 @@ public class OneVisitEntity {
     private String description;
 
     private String price;
+
+    @Enumerated(EnumType.STRING)
+    private VisitTypeEnum visitType;
 }

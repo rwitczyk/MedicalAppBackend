@@ -9,6 +9,7 @@ import dmcs.rwitczyk.exceptions.AccountAlreadyExistsException;
 import dmcs.rwitczyk.exceptions.AccountNotFoundException;
 import dmcs.rwitczyk.exceptions.UnauthorizedAccessException;
 import dmcs.rwitczyk.models.VisitStatusEnum;
+import dmcs.rwitczyk.models.VisitTypeEnum;
 import dmcs.rwitczyk.repository.*;
 import dmcs.rwitczyk.utils.Converters;
 import dmcs.rwitczyk.utils.OneVisitPdfGenerator;
@@ -142,7 +143,9 @@ public class PatientService {
             }
         }
 
-        List<OneVisitEntity> finalAvailableVisits = oneVisitRepository.findByDoctorEntityAndDateAndStatusOrStatus(doctorEntity, visitDate, VisitStatusEnum.FREE, VisitStatusEnum.CANCELLED);
+        List<OneVisitEntity> finalAvailableVisits = oneVisitRepository.findByDoctorEntityAndDateAndStatus(doctorEntity, visitDate, VisitStatusEnum.FREE);
+        finalAvailableVisits.addAll(oneVisitRepository.findByDoctorEntityAndDateAndStatus(doctorEntity, visitDate, VisitStatusEnum.CANCELLED));
+
         List<AvailableVisitsListDto> availableVisitsListDtos = new ArrayList<>();
 
         for (OneVisitEntity oneVisitEntity : finalAvailableVisits) {
@@ -164,7 +167,7 @@ public class PatientService {
                     .build());
         };
 
-
+        oneVisitEntity.setVisitType(VisitTypeEnum.of(reserveVisitDto.getVisitType()));
         oneVisitEntity.setPatientEntity(patientEntity);
         oneVisitEntity.setStatus(VisitStatusEnum.TO_ACCEPT);
         oneVisitRepository.save(oneVisitEntity);
