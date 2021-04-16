@@ -1,0 +1,17 @@
+# create admin account
+http://localhost:8080/patient/add POST
+{"firstName": "adminImie",
+"lastName": "adminNazwisko",
+"email": "admin@admin.pl",
+"password": "test123",
+"phoneNumber": "123412341"}
+
+
+
+# create patient account
+http://localhost:8080/patient/add POST
+{"firstName": "pacjentImie",
+"lastName": "pacjentNazwisko",
+"email": "pacjent@pacjent.pl",
+"password": "test123",
+"phoneNumber": "123456789"}

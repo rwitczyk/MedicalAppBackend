@@ -1,5 +1,6 @@
 package dmcs.rwitczyk.domains;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 import org.hibernate.annotations.Fetch;
@@ -32,12 +33,8 @@ public class NurseEntity {
     @NotBlank
     private String lastName;
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "nurseEntity")
-    private List<NurseTaskEntity> nurseTaskEntities;
-
-
     @Fetch(value = FetchMode.SUBSELECT)
-    @JsonManagedReference
+    @JsonBackReference
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "nurseEntity")
     private List<LaboratoryTestEntity> laboratoryTestEntities;
 }

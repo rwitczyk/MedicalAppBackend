@@ -1,5 +1,6 @@
 package dmcs.rwitczyk.domains;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 
 import javax.persistence.*;
@@ -18,6 +19,7 @@ public class AdvertisingGroupEntity {
 
     private String name;
 
+    @JsonManagedReference
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private PatientEntity patient;
 }

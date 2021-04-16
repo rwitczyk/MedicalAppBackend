@@ -2,9 +2,7 @@ package dmcs.rwitczyk.domains;
 
 import lombok.Data;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.OneToOne;
+import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.sql.Date;
 
@@ -13,12 +11,13 @@ import java.sql.Date;
 public class NurseTaskEntity {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @OneToOne
     private PatientEntity patientEntity;
 
-    @OneToOne
+    @ManyToOne
     private NurseEntity nurseEntity;
 
     @NotBlank

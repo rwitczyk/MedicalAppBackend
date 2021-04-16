@@ -20,11 +20,11 @@ public class OneVisitEntity {
     private int id;
 
     @JsonBackReference
-    @OneToOne
+    @ManyToOne
     private DoctorEntity doctorEntity;
 
     @JsonBackReference
-    @OneToOne
+    @ManyToOne
     private PatientEntity patientEntity;
 
     private VisitStatusEnum status;

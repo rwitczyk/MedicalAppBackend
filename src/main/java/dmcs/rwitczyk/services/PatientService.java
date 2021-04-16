@@ -142,7 +142,7 @@ public class PatientService {
             }
         }
 
-        List<OneVisitEntity> finalAvailableVisits = oneVisitRepository.findByDoctorEntityAndDateAndStatus(doctorEntity, visitDate, VisitStatusEnum.FREE);
+        List<OneVisitEntity> finalAvailableVisits = oneVisitRepository.findByDoctorEntityAndDateAndStatusOrStatus(doctorEntity, visitDate, VisitStatusEnum.FREE, VisitStatusEnum.CANCELLED);
         List<AvailableVisitsListDto> availableVisitsListDtos = new ArrayList<>();
 
         for (OneVisitEntity oneVisitEntity : finalAvailableVisits) {
