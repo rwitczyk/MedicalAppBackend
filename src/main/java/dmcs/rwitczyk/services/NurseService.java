@@ -58,9 +58,6 @@ public class NurseService {
     public void editNurseAccount(EditNurseAccountDto nurseAccountDto) {
         NurseEntity nurseEntity = this.nurseRepository.findById(nurseAccountDto.getNurseId()).get();
 
-        nurseEntity.setFirstName(nurseAccountDto.getFirstName());
-        nurseEntity.setLastName(nurseAccountDto.getLastName());
-
         if (nurseAccountDto.getPassword().length() > 0) {
             nurseEntity.getUserLoginDataEntity().setPassword(passwordEncoder.encode(nurseAccountDto.getPassword()));
         }
