@@ -1,7 +1,9 @@
 package dmcs.rwitczyk.services;
 
 import dmcs.rwitczyk.domains.AdvertisingGroupEntity;
+import dmcs.rwitczyk.domains.PatientEntity;
 import dmcs.rwitczyk.repository.AdvertisingGroupRepository;
+import dmcs.rwitczyk.repository.PatientRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,9 +23,13 @@ public class AdvertisingService {
     @Autowired
     private AdvertisingGroupRepository advertisingGroupRepository;
 
+    @Autowired
+    private PatientRepository patientRepository;
 
-    public List<String> getPatientAdvertisingGroups(int patientId) {
-        List<AdvertisingGroupEntity> advertisingGroupEntities = advertisingGroupRepository.findByPatientId(patientId);
+
+    public List<String> getPatientAdvertisingGroups(int accountId) {
+        PatientEntity patientEntity = patientRepository.findByUserLoginDataEntityId(accountId);
+        List<AdvertisingGroupEntity> advertisingGroupEntities = advertisingGroupRepository.findByPatientId(patientEntity.getId());
         List<String> advertisingGroups = new ArrayList<>();
 
         advertisingGroupEntities.stream().forEach(group -> advertisingGroups.add(group.getName()));

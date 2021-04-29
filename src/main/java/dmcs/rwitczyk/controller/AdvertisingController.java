@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.*;
 @CrossOrigin(origins = "http://localhost:4200")
 public class AdvertisingController {
 
-
     private AdvertisingService advertisingService;
 
     @Autowired
@@ -19,9 +18,10 @@ public class AdvertisingController {
         this.advertisingService = advertisingService;
     }
 
-    @GetMapping(value = "/patient/{id}")
-    public ResponseEntity getPatientAdvertisingGroups(@PathVariable int id) {
-        return new ResponseEntity<>(advertisingService.getPatientAdvertisingGroups(id), HttpStatus.OK);
+
+    @GetMapping(value = "/patient/{accountId}")
+    public ResponseEntity getPatientAdvertisingGroups(@PathVariable int accountId) {
+        return new ResponseEntity<>(advertisingService.getPatientAdvertisingGroups(accountId), HttpStatus.OK);
     }
 
 }
