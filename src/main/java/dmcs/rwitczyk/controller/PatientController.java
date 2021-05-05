@@ -34,7 +34,7 @@ public class PatientController {
         return new ResponseEntity(HttpStatus.OK);
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN','NURSE')")
+    @PreAuthorize("hasAnyRole('ADMIN','NURSE', 'DOCTOR')")
     @GetMapping(value = "/all")
     public ResponseEntity getAllPatients() {
         return new ResponseEntity<>(patientService.getAllPatients(), HttpStatus.OK);

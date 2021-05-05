@@ -25,4 +25,13 @@ public class AvailableVisitsListDto {
     private String description;
 
     private String price;
+
+    private String patientLastName;
+
+    private String patientFirstName;
+
+    private String doctorLastName;
+
+    private String doctorFirstName;
+
 }

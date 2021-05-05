@@ -15,6 +15,8 @@ public interface OneVisitRepository extends JpaRepository<OneVisitEntity, Intege
 
     List<OneVisitEntity> findByDoctorEntity(DoctorEntity doctorEntity);
 
+    List<OneVisitEntity> findByDoctorEntityAndPatientEntityId(DoctorEntity doctorEntity, int patientId);
+
     List<OneVisitEntity> findByDoctorEntityAndDate(DoctorEntity doctorEntity, Date date);
 
     List<OneVisitEntity> findByDoctorEntityAndDateAndStatus(DoctorEntity doctorEntity, Date date, VisitStatusEnum statusEnum);

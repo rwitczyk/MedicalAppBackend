@@ -101,4 +101,16 @@ public class DoctorService {
         oneVisitEntity.setStatus(VisitStatusEnum.ACCEPTED);
         oneVisitRepository.save(oneVisitEntity);
     }
+
+    public List<AvailableVisitsListDto> getAllDoctorVisitsByPatient(int doctorAccountId, int patientId) {
+        DoctorEntity doctorEntity = doctorRepository.findByUserLoginDataEntityId(doctorAccountId);
+        List<OneVisitEntity> oneVisitEntities = oneVisitRepository.findByDoctorEntityAndPatientEntityId(doctorEntity, patientId);
+
+        List<AvailableVisitsListDto> availableVisitsListDtos = new ArrayList<>();
+        for (OneVisitEntity oneVisitEntity : oneVisitEntities) {
+            availableVisitsListDtos.add(Converters.convertOneVisitEntityToAvailableVisitsListDto(oneVisitEntity));
+        }
+
+        return availableVisitsListDtos;
+    }
 }

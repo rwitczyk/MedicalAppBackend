@@ -55,6 +55,12 @@ public class DoctorController {
     }
 
     @PreAuthorize("hasRole('DOCTOR')")
+    @GetMapping(value = "/allVisits/{doctorAccountId}/{patientId}")
+    public ResponseEntity getAllDoctorVisitsByPatient(@PathVariable int doctorAccountId, @PathVariable int patientId) {
+        return new ResponseEntity<>(doctorService.getAllDoctorVisitsByPatient(doctorAccountId, patientId), HttpStatus.OK);
+    }
+
+    @PreAuthorize("hasRole('DOCTOR')")
     @PostMapping(value = "/acceptVisit")
     public ResponseEntity addDoctor(@RequestBody AcceptVisitDto acceptVisitDto) {
         doctorService.acceptVisit(acceptVisitDto);

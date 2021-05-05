@@ -50,6 +50,10 @@ public class Converters {
                 .description(oneVisitEntity.getDescription())
                 .status(oneVisitEntity.getStatus())
                 .price(oneVisitEntity.getPrice())
+                .patientFirstName(oneVisitEntity.getPatientEntity() != null ? oneVisitEntity.getPatientEntity().getFirstName() : null)
+                .patientLastName(oneVisitEntity.getPatientEntity() != null ? oneVisitEntity.getPatientEntity().getLastName() : null)
+                .doctorFirstName(oneVisitEntity.getDoctorEntity() != null ? oneVisitEntity.getDoctorEntity().getFirstName() : null)
+                .doctorLastName(oneVisitEntity.getDoctorEntity() != null ? oneVisitEntity.getDoctorEntity().getLastName() : null)
                 .build();
     }
 
