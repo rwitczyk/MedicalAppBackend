@@ -52,14 +52,15 @@ public class LaboratoryTestService {
         UserLoginDataEntity user = userLoginDataRepository.findById(registerForACovidTestDto.getAccountId()).get();
 
         boolean isUserAlreadyRegistered = covidTestRegistrationRepository.existsByUserLoginDataEntityAndStatus(user, CovidTestRegistrationStatusEnum.BUSY);
-        if (isUserAlreadyRegistered) {
-            log.info("Istnieje juz zarezerwowana wizyta dla konta o id:" + user.getId());
+        if (registerForACovidTestDto.getVisitType().equals("covidTest") && isUserAlreadyRegistered) {
+            log.info("Istnieje juz zarezerwowane badanie covid dla konta o id:" + user.getId());
             throw new VisitAlreadyExistsException();
         }
 
         CovidTestRegistrationEntity covidTestRegistrationEntity = covidTestRegistrationRepository.findById(registerForACovidTestDto.getVisitId()).get();
         covidTestRegistrationEntity.setStatus(CovidTestRegistrationStatusEnum.BUSY);
         covidTestRegistrationEntity.setSeroTest(registerForACovidTestDto.isSeroTest());
+        covidTestRegistrationEntity.setVisitType(registerForACovidTestDto.getVisitType());
         covidTestRegistrationEntity.setAntygenTest(registerForACovidTestDto.isAntygenTest());
         covidTestRegistrationEntity.setPcrTest(registerForACovidTestDto.isPcrTest());
         covidTestRegistrationEntity.setPrice(registerForACovidTestDto.getPrice());

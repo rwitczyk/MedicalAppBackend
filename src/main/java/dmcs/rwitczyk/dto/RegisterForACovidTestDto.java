@@ -11,6 +11,8 @@ public class RegisterForACovidTestDto {
 
     private Long visitId;
 
+    private String visitType;
+
     private String price;
 
     private boolean pcrTest;

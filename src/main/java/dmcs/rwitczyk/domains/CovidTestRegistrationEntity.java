@@ -23,6 +23,8 @@ public class CovidTestRegistrationEntity {
 
     private Date visitDate;
 
+    private String visitType;
+
     private CovidTestRegistrationStatusEnum status;
 
     private String fromTime;
