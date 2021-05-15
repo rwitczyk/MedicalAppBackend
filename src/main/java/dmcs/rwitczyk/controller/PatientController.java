@@ -40,6 +40,13 @@ public class PatientController {
         return new ResponseEntity<>(patientService.getAllPatients(), HttpStatus.OK);
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN','NURSE', 'DOCTOR')")
+    @GetMapping(value = "/all/{doctorAccountId}")
+    public ResponseEntity getAllDoctorPatients(@PathVariable Integer doctorAccountId) {
+        return new ResponseEntity<>(patientService.getAllDoctorPatients(doctorAccountId), HttpStatus.OK);
+    }
+
+
     @PreAuthorize("hasAnyRole('ADMIN', 'PATIENT', 'DOCTOR')")
     @GetMapping(value = "/getById/{patientAccountId}")
     public ResponseEntity getPatientById(@PathVariable Integer patientAccountId) {

@@ -25,6 +25,7 @@ import java.io.ByteArrayOutputStream;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -84,6 +85,17 @@ public class PatientService {
     public List<PatientEntity> getAllPatients() {
         List<PatientEntity> allPatients = patientRepository.findAll();
         return allPatients;
+    }
+
+    public List<PatientEntity> getAllDoctorPatients(int doctorAccountId) {
+        DoctorEntity doctor = doctorRepository.findByUserLoginDataEntityId(doctorAccountId);
+
+        List<PatientEntity> allPatients = patientRepository.findAll();
+
+        return allPatients.stream()
+                .filter(patient -> patient.getAdvertisingGroups().stream().anyMatch(adsGroup -> adsGroup.getName().equals(doctor.getSpecialization()))
+                ).collect(Collectors.toList());
+
     }
 
     public void changeAccountState(Integer patientId, boolean changeAccountAction) {
@@ -165,7 +177,8 @@ public class PatientService {
                     .name(oneVisitEntity.getDoctorEntity().getSpecialization())
                     .patient(patientEntity)
                     .build());
-        };
+        }
+        ;
 
         oneVisitEntity.setVisitType(VisitTypeEnum.of(reserveVisitDto.getVisitType()));
         oneVisitEntity.setPatientEntity(patientEntity);
